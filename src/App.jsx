@@ -1,9 +1,10 @@
 import React, { memo } from 'react'
+import AppHeader from './components/AppHeader'
 
 const App = memo(() => {
   return (
     <>
-      <h2>App</h2>
+      <AppHeader />
     </>
   )
 })
