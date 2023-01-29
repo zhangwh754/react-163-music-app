@@ -35,23 +35,39 @@ export const footerLinks = [
     link: 'https://music.163.com/st/staticdeal/complaints.html'
   },
   {
-    title: '意见反馈',
-    link: '#'
+    title: '联系我们',
+    link: 'https://mp.music.163.com/600948c936c13f4d09752e73/contact-us-web/index.html?source=Music-Main-Station'
   }
 ]
 
-export const footerImages = [
+export const footerBtns = [
   {
+    title: '音乐开放平台',
+    link: 'https://developer.music.163.com/st/developer'
+  },
+  {
+    title: '云村交易所',
+    link: 'https://music.163.com/st/web-sublicense/home'
+  },
+  {
+    title: 'Amped Studio',
+    link: 'https://web-amped.music.163.com/'
+  },
+  {
+    title: '用户认证',
     link: 'https://music.163.com/st/userbasic#/auth'
   },
   {
-    link: 'https://music.163.com/recruit'
+    title: '音乐交易平台',
+    link: 'https://music.163.com/st/ad-cms-bills/mlogin?from=mainStation'
   },
   {
+    title: '赞赏',
     link: 'https://music.163.com/web/reward'
   },
   {
-    link: 'https://music.163.com/uservideo#/plan'
+    title: '视频激励',
+    link: 'https://music.163.com/st/ncreator/revenue-plan'
   }
 ]
 
