@@ -1,3 +1,4 @@
 import isEmpty from './isEmpty'
+import pick from './pick'
 
-export { isEmpty }
+export { isEmpty, pick }
