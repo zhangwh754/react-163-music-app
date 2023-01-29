@@ -1,5 +1,4 @@
-import useHash from "./useHash";
+import useHash from './useHash'
+import useThrottle from './useThrottle'
 
-export {
-  useHash
-}
+export { useHash, useThrottle }
