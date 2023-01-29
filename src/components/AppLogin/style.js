@@ -35,8 +35,6 @@ export const LoginWrapper = styled.div`
     .main {
       width: 538px;
       background-color: #fff;
-      font-size: 80px;
-      color: red;
     }
   }
 `

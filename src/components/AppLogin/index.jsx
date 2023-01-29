@@ -5,7 +5,8 @@ import { LoginWrapper } from './style'
 import { useModalShow } from '@/hooks'
 import AppModal from '@/ui/AppModal'
 // import LoginForm from './cpns/LoginForm'
-import LoginForm2 from './cpns/LoginForm2'
+// import LoginForm2 from './cpns/LoginForm2'
+import LoginForm3 from './cpns/LoginForm3'
 
 const AppLogin = memo(() => {
   const { isLoginPanelShow } = useSelector(
@@ -29,7 +30,7 @@ const AppLogin = memo(() => {
               </div>
             </div>
             <div className="main">
-              <LoginForm2 />
+              <LoginForm3 />
             </div>
           </div>
         </LoginWrapper>

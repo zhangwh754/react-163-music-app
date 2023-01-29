@@ -6,7 +6,11 @@
     "cpns",
     "craco",
     "netease",
+    "qrimg",
+    "qrurl",
     "reduxjs",
-    "toplist"
+    "timerstamp",
+    "toplist",
+    "unikey"
   ]
 }

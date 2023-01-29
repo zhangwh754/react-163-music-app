@@ -1,33 +1,34 @@
-import React, { memo, useRef, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { Input } from 'antd'
 // import { CustomerServiceOutlined, ExportOutlined, SearchOutlined } from '@ant-design/icons'
 import { SearchOutlined } from '@ant-design/icons'
 
 import { RightWrapper } from './style'
-import { shallowEqual, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { getUserInfo } from '@/store/features/login'
 // import KeyBoard from '@/assets/svg/KeyBoard'
 
 const HeaderRight = memo(() => {
   const [value, setValue] = useState('')
 
-  const { isLogin, profile } = useSelector(
+  const dispatch = useDispatch()
+
+  const { isLogin, userInfo } = useSelector(
     state => ({
-      isLogin: state.user?.isLogin,
-      profile: state.user?.profile
+      isLogin: state.login.isLogin,
+      userInfo: state.login.userInfo
     }),
     shallowEqual
   )
 
+  useEffect(() => {
+    dispatch(getUserInfo())
+  }, [dispatch])
+
   const inputRef = useRef()
 
   // 头像
-  const profileImg = (
-    <img
-      src={profile?.avatarUrl || 'https://p2.music.126.net/sVXkNFFIOdk1pncFhmfGBg==/19066631137322512.jpg?param=30y30'}
-      alt=""
-      className="profile-img"
-    />
-  )
+  const profileImg = <img src={userInfo?.avatarUrl + '?param=30y30'} alt="" className="profile-img" />
 
   return (
     <RightWrapper>

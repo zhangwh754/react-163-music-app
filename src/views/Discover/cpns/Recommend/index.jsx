@@ -6,12 +6,14 @@ import { getRecommendData } from '@/store/features/recommend'
 import { isEmpty } from '@/utils'
 import RecommendBanner from '@/components/RecommendBanner'
 import UserLogin from './cpns/RightLogin'
+import RightPanel from './cpns/RightPanel'
 
 const Recommend = memo(() => {
-  const { banner, isLogin } = useSelector(
+  const { banner, isLogin, userInfo } = useSelector(
     state => ({
       banner: state.recommend.banner,
-      isLogin: state.user?.isLogin
+      isLogin: state.login.isLogin,
+      userInfo: state.login.userInfo
     }),
     shallowEqual
   )
@@ -30,7 +32,7 @@ const Recommend = memo(() => {
           <div className="main-left">left</div>
           <div className="main-right">
             {/* 登录面板和用户面板 */}
-            {isLogin ? <UserLogin /> : <UserLogin />}
+            {isLogin ? <RightPanel userInfo={userInfo} /> : <UserLogin />}
           </div>
         </div>
       </div>
