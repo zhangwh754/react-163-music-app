@@ -57,7 +57,7 @@ const RecommendBanner = memo(props => {
           <ul className="indicator">
             {props.banner.map((item, index) => (
               <li
-                key={item.id}
+                key={index}
                 className={classNames('dot', { active: index === currentIndex })}
                 onClick={e => handleChangeCurrentIndex(index)}
               />

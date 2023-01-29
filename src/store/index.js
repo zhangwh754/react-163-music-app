@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { recommendReducer } from './features'
+import { recommendReducer, loginReducer } from './features'
 
 const store = configureStore({
   reducer: {
-    recommend: recommendReducer
+    recommend: recommendReducer,
+    login: loginReducer
   }
 })
 

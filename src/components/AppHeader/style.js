@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 export const HeaderWrapper = styled.div`
   > .content {
-    display: flex;
     height: 70px;
     background-color: #242424;
 

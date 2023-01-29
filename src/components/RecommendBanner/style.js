@@ -16,7 +16,7 @@ export const BannerWrapper = styled.div`
 
   > .content {
     position: relative;
-    width: 982px;
+    width: 980px;
     height: 285px;
     margin: 0 auto;
     display: flex;
