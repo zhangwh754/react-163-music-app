@@ -4,7 +4,6 @@ export const RadiosWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-bottom: 1px solid #ccc;
 
   li {
     margin-bottom: 10px;

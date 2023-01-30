@@ -45,3 +45,27 @@ export const fetchTopAlbumData = async (limit = 10) => {
 
   return res.albums
 }
+
+// 获取歌单详情
+export const fetchPlayListDetail = async (id = '') => {
+  const res = await request.get({
+    url: '/playlist/detail',
+    params: {
+      id
+    }
+  })
+
+  return res.playlist
+}
+
+// 获取歌曲详情
+export const fetchSongDetail = async (ids = []) => {
+  const res = await request.get({
+    url: '/song/detail',
+    params: {
+      ids: ids.join(',')
+    }
+  })
+
+  return res.songs
+}

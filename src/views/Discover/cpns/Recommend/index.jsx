@@ -12,15 +12,18 @@ import RightArtist from './cpns/RightArtist'
 import RightRadios from './cpns/RightRadios'
 import LeftCovers from './cpns/LeftCovers'
 import LeftNewAlbums from './cpns/LeftNewAlbums'
+import LeftTopList from './cpns/LeftTopList'
 
 const Recommend = memo(() => {
-  const { banner, isLogin, userInfo, hotRecommend, topAlbum } = useSelector(
+  const { banner, isLogin, userInfo, hotRecommend, topAlbum, playlist, playlistInfo } = useSelector(
     state => ({
-      banner: state.recommend.banner,
       isLogin: state.login.isLogin,
       userInfo: state.login.userInfo,
+      banner: state.recommend.banner,
       hotRecommend: state.recommend.hotRecommend,
-      topAlbum: state.recommend.topAlbum
+      topAlbum: state.recommend.topAlbum,
+      playlist: state.recommend.playlist,
+      playlistInfo: state.recommend.playlistInfo
     }),
     shallowEqual
   )
@@ -39,6 +42,7 @@ const Recommend = memo(() => {
           <div className="main-left">
             {!isEmpty(hotRecommend) && <LeftCovers hotRecommend={hotRecommend} />}
             {!isEmpty(topAlbum) && <LeftNewAlbums topAlbum={topAlbum} />}
+            {!isEmpty(playlist) && <LeftTopList playlist={playlist} playlistInfo={playlistInfo} />}
           </div>
           <div className="main-right">
             {/* 登录面板和用户面板 */}

@@ -1,6 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { fetchArtistList, fetchBannerData, fetchTopAlbumData, fetchTopPlaylistData } from '@/services/module/recommend'
+import {
+  fetchPlayListDetail,
+  fetchArtistList,
+  fetchBannerData,
+  fetchTopAlbumData,
+  fetchTopPlaylistData,
+  fetchSongDetail
+} from '@/services/module/recommend'
 import { pick } from '@/utils'
 
 export const getRecommendData = createAsyncThunk('getRecommendData', async (payload, { dispatch }) => {
@@ -23,6 +30,17 @@ export const getRecommendData = createAsyncThunk('getRecommendData', async (payl
     .slice(0, 10)
     .map(item => Object.assign(pick(item, ['id', 'name', 'picUrl']), { artist: item.artist.name }))
   dispatch(setTopAlbumAction(topAlbumData))
+
+  // 获取首页-推荐-三个榜单前十条歌曲的id
+  const playListDetail = await Promise.all(['19723756', '3779629', '2884035'].map(id => fetchPlayListDetail(id)))
+  dispatch(setPlaylistInfoAction(playListDetail.map(item => pick(item, ['id', 'name', 'coverImgUrl']))))
+  const idsArr = playListDetail.map(list => list.trackIds.slice(0, 10).map(item => item.id))
+  // 根据id拿取歌曲的名字
+  let playlistData = []
+  for (let i = 0; i < idsArr.length; i++) {
+    playlistData[i] = (await fetchSongDetail(idsArr[i])).map(item => pick(item, ['id', 'name']))
+  }
+  dispatch(setPlaylistAction(playlistData))
 })
 
 const recommendSlice = createSlice({
@@ -31,7 +49,9 @@ const recommendSlice = createSlice({
     banner: [],
     artist: [],
     hotRecommend: [],
-    topAlbum: []
+    topAlbum: [],
+    playlist: [],
+    playlistInfo: []
   },
   reducers: {
     setBannerAction(state, { payload }) {
@@ -45,10 +65,23 @@ const recommendSlice = createSlice({
     },
     setTopAlbumAction(state, { payload }) {
       state.topAlbum = payload
+    },
+    setPlaylistAction(state, { payload }) {
+      state.playlist = payload
+    },
+    setPlaylistInfoAction(state, { payload }) {
+      state.playlistInfo = payload
     }
   }
 })
 
-const { setBannerAction, setArtistAction, setHotRecommendAction, setTopAlbumAction } = recommendSlice.actions
+const {
+  setBannerAction,
+  setArtistAction,
+  setHotRecommendAction,
+  setTopAlbumAction,
+  setPlaylistAction,
+  setPlaylistInfoAction
+} = recommendSlice.actions
 
 export default recommendSlice.reducer
