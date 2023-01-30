@@ -7,7 +7,7 @@ export const NavWrapper = styled.nav`
     margin: -5px auto 0;
     display: flex;
     align-items: center;
-    height: 35px;
+    height: 30px;
 
     ul {
       margin-left: 176px;

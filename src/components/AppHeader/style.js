@@ -1,8 +1,13 @@
 import styled from 'styled-components'
 
 export const HeaderWrapper = styled.div`
+  height: 70px;
+
   > .content {
-    height: 70px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 99;
     background-color: #242424;
 
     .wrap {

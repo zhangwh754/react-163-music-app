@@ -7,11 +7,12 @@ const Recommend = React.lazy(() => import('@/views/Discover/cpns/Recommend'))
 const Ranking = React.lazy(() => import('@/views/Discover/cpns/Ranking'))
 const Songs = React.lazy(() => import('@/views/Discover/cpns/Songs'))
 const Album = React.lazy(() => import('@/views/Discover/cpns/Album'))
+const Mine = React.lazy(() => import('@/views/Mine'))
 
 const config = [
   { path: '', element: <Navigate to="/discover" /> },
   {
-    path: 'discover',
+    path: '/discover',
     element: <Discover />,
     children: [
       { path: '/discover', element: <Navigate to="/discover/recommend" /> },
@@ -20,6 +21,11 @@ const config = [
       { path: '/discover/songs', element: <Songs /> },
       { path: '/discover/album', element: <Album /> }
     ]
+  },
+
+  {
+    path: '/mine',
+    element: <Mine />
   },
 
   {

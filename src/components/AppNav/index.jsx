@@ -7,7 +7,7 @@ const AppNav = memo(() => {
   const { hash } = useHash()
 
   return (
-    <NavWrapper>
+    <NavWrapper hasSub={hash === 'discover'}>
       <div className="content">
         <div className="bar"></div>
         {hash === 'discover' && <SubNav />}

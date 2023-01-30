@@ -14,7 +14,6 @@ const App = memo(() => {
       <AppNav />
       <Suspense fallback={<h2>Loading...</h2>}>{useRoutes(route)}</Suspense>
       <AppFooter />
-
       {/* 登录弹窗 */}
       <AppLogin />
     </>
