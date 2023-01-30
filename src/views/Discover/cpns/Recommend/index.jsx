@@ -10,6 +10,8 @@ import RightPanel from './cpns/RightPanel'
 import HeaderLine1 from '@/components/HeaderLine1'
 import RightArtist from './cpns/RightArtist'
 import RightRadios from './cpns/RightRadios'
+import HeaderLine2 from '@/components/HeaderLine2'
+import { useNavigate } from 'react-router-dom'
 
 const Recommend = memo(() => {
   const { banner, isLogin, userInfo } = useSelector(
@@ -23,16 +25,29 @@ const Recommend = memo(() => {
 
   const dispatch = useDispatch()
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     dispatch(getRecommendData())
   }, [dispatch])
+
+  const handleKeyWordClick = item => {
+    navigate(`/discover/songs?albumName=${item}`)
+  }
 
   return (
     <RecommendWrapper>
       <div className="content">
         <div className="banner">{!isEmpty(banner) && <RecommendBanner banner={banner} />}</div>
         <div className="main">
-          <div className="main-left">left</div>
+          <div className="main-left">
+            <HeaderLine2
+              title="热门推荐"
+              keywords={['华语', '流行', '摇滚', '民谣', '电子']}
+              rightUrl="/discover/ranking/"
+              keywordsClick={item => handleKeyWordClick(item)}
+            />
+          </div>
           <div className="main-right">
             {/* 登录面板和用户面板 */}
             {isLogin ? <RightPanel userInfo={userInfo} /> : <UserLogin />}
