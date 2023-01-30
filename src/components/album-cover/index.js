@@ -18,7 +18,7 @@ const AlbumCover = memo(props => {
     <AlbumCoverWrapper width={width} bgp={bgp} size={size} onClick={e => navigate(`/album?id=${id}`)}>
       <div className="album-image pointer">
         <img src={getSizeImage(picUrl, size)} alt={name} />
-        <a href="/discover/recommend" className="no-link image_cover cover">
+        <a href="/discover/recommend" className="no-link image_cover cover" onClick={e => e.preventDefault()}>
           {name}
         </a>
       </div>

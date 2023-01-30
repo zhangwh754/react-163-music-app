@@ -1,23 +1,26 @@
 import React, { memo } from 'react'
 import { getCount, getSizeImage } from '@/utils'
 import { SongCoverWrapper } from './style'
+import { useNavigate } from 'react-router-dom'
 
 // 歌曲封面组件
 const SongCover = memo(props => {
-  const { songList, width = 140 } = props
+  const { width = 140 } = props
   // pic
-  const picUrl = (props && (props.picUrl || props.coverImgUrl)) || (songList && songList.coverImgUrl)
+  const picUrl = props && (props.picUrl || props.coverImgUrl)
   // playCount 播放次数
-  const playCount = (props && props.playCount) || (songList && songList.playCount) || 0
+  const playCount = props && props.playCount
   // name
-  const name = (props && props.name) || (songList && songList.name)
+  const name = props && props.name
   // nickname
-  const nickname = (props && props.copywriter) || (songList && songList.creator.nickname)
+  const nickname = props && props.copywriter
   // id
-  const songpropsId = (props && props.id) || (songList && songList.id)
+  const playlistId = props && props.id
+
+  const navigate = useNavigate()
 
   return (
-    <SongCoverWrapper width={width} href={`#/songlist?songlistId=${songpropsId}`}>
+    <SongCoverWrapper width={width} onClick={e => navigate(`/playlist?id=${playlistId}`)}>
       <div className="cover-wrapper">
         <img src={getSizeImage(picUrl, 140)} alt="" />
         <div className="cover-mask sprite_cover">
