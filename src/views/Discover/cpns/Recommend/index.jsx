@@ -10,30 +10,24 @@ import RightPanel from './cpns/RightPanel'
 import HeaderLine1 from '@/components/HeaderLine1'
 import RightArtist from './cpns/RightArtist'
 import RightRadios from './cpns/RightRadios'
-import HeaderLine2 from '@/components/HeaderLine2'
-import { useNavigate } from 'react-router-dom'
+import LeftCovers from './cpns/LeftCovers'
 
 const Recommend = memo(() => {
-  const { banner, isLogin, userInfo } = useSelector(
+  const { banner, isLogin, userInfo, hotRecommend } = useSelector(
     state => ({
       banner: state.recommend.banner,
       isLogin: state.login.isLogin,
-      userInfo: state.login.userInfo
+      userInfo: state.login.userInfo,
+      hotRecommend: state.recommend.hotRecommend
     }),
     shallowEqual
   )
 
   const dispatch = useDispatch()
 
-  const navigate = useNavigate()
-
   useEffect(() => {
     dispatch(getRecommendData())
   }, [dispatch])
-
-  const handleKeyWordClick = item => {
-    navigate(`/discover/songs?albumName=${item}`)
-  }
 
   return (
     <RecommendWrapper>
@@ -41,12 +35,7 @@ const Recommend = memo(() => {
         <div className="banner">{!isEmpty(banner) && <RecommendBanner banner={banner} />}</div>
         <div className="main">
           <div className="main-left">
-            <HeaderLine2
-              title="热门推荐"
-              keywords={['华语', '流行', '摇滚', '民谣', '电子']}
-              rightUrl="/discover/ranking/"
-              keywordsClick={item => handleKeyWordClick(item)}
-            />
+            {!isEmpty(hotRecommend) && <LeftCovers hotRecommend={hotRecommend} />}
           </div>
           <div className="main-right">
             {/* 登录面板和用户面板 */}

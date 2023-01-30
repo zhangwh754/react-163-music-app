@@ -21,3 +21,15 @@ export const fetchArtistList = async payload => {
 
   return res.artists
 }
+
+// 获取网友精选歌单
+export const fetchTopPlaylistData = async payload => {
+  const res = await request.get({
+    url: '/top/playlist',
+    params: {
+      limit: payload.limit || 8
+    }
+  })
+
+  return res.playlists
+}
