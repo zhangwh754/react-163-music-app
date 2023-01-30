@@ -33,3 +33,15 @@ export const fetchTopPlaylistData = async payload => {
 
   return res.playlists
 }
+
+// 获取新碟上架
+export const fetchTopAlbumData = async (limit = 10) => {
+  const res = await request.get({
+    url: '/album/newest',
+    params: {
+      limit
+    }
+  })
+
+  return res.albums
+}

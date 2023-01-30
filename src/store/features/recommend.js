@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { fetchArtistList, fetchBannerData, fetchTopPlaylistData } from '@/services/module/recommend'
+import { fetchArtistList, fetchBannerData, fetchTopAlbumData, fetchTopPlaylistData } from '@/services/module/recommend'
 import { pick } from '@/utils'
 
 export const getRecommendData = createAsyncThunk('getRecommendData', async (payload, { dispatch }) => {
@@ -17,6 +17,12 @@ export const getRecommendData = createAsyncThunk('getRecommendData', async (payl
     pick(item, ['id', 'name', 'coverImgUrl', 'playCount'])
   )
   dispatch(setHotRecommendAction(hotRecommendData))
+
+  // 获取首页-推荐-新碟上架（前十条）
+  const topAlbumData = (await fetchTopAlbumData())
+    .slice(0, 10)
+    .map(item => Object.assign(pick(item, ['id', 'name', 'picUrl']), { artist: item.artist.name }))
+  dispatch(setTopAlbumAction(topAlbumData))
 })
 
 const recommendSlice = createSlice({
@@ -24,7 +30,8 @@ const recommendSlice = createSlice({
   initialState: {
     banner: [],
     artist: [],
-    hotRecommend: []
+    hotRecommend: [],
+    topAlbum: []
   },
   reducers: {
     setBannerAction(state, { payload }) {
@@ -35,10 +42,13 @@ const recommendSlice = createSlice({
     },
     setHotRecommendAction(state, { payload }) {
       state.hotRecommend = payload
+    },
+    setTopAlbumAction(state, { payload }) {
+      state.topAlbum = payload
     }
   }
 })
 
-const { setBannerAction, setArtistAction, setHotRecommendAction } = recommendSlice.actions
+const { setBannerAction, setArtistAction, setHotRecommendAction, setTopAlbumAction } = recommendSlice.actions
 
 export default recommendSlice.reducer
