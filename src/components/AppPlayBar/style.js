@@ -29,7 +29,6 @@ export const Head = styled.div`
   img {
     width: 34px;
     height: 34px;
-    background-color: red;
   }
 `
 

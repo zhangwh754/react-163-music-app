@@ -1,7 +1,5 @@
-import recommendReducer from "./recommend"
-import loginReducer from "./login"
+import recommendReducer from './recommend'
+import loginReducer from './login'
+import songReducer from './song'
 
-export {
-  recommendReducer,
-  loginReducer,
-}
+export { recommendReducer, loginReducer, songReducer }
