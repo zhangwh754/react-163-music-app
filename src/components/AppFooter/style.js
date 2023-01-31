@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const FooterWrapper = styled.footer`
   > .content {
     background-color: #f2f2f2;
-    padding: 33px 0;
+    padding: 33px 0 53px;
 
     .enter {
       width: 980px;

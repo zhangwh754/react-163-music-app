@@ -6,6 +6,7 @@ import AppHeader from './components/AppHeader'
 import AppNav from './components/AppNav'
 import AppFooter from './components/AppFooter'
 import AppLogin from './components/AppLogin'
+import AppPlayBar from './components/AppPlayBar'
 
 const App = memo(() => {
   return (
@@ -16,6 +17,8 @@ const App = memo(() => {
       <AppFooter />
       {/* 登录弹窗 */}
       <AppLogin />
+      {/* 底部播放条 */}
+      <AppPlayBar />
     </>
   )
 })

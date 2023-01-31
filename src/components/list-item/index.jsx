@@ -6,9 +6,6 @@ import { ItemWrapper } from './style'
 const ListItem = memo(props => {
   const { playlist, playlistInfo } = props
 
-  console.log(playlist)
-  console.log(playlistInfo)
-
   return (
     <ItemWrapper>
       <div className="item-header">
