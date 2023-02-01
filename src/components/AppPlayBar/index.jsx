@@ -7,17 +7,19 @@ import Control from './cpns/Control'
 import Slide from './cpns/Slide'
 import { formatDate } from '@/utils'
 import Control2 from './cpns/Control2'
-import { getSongDetail } from '@/store/features/song'
+import { getSongDetail, setCurrentLyricAction } from '@/store/features/song'
 import PlayList from './cpns/PlayList'
 
 const AppPlayBar = memo(() => {
   const [isPlaying, setIsPlaying] = useState(false) // 是否正在播放
-  const [type, setType] = useState('loop') // 当前播放类型
+  const [type] = useState('loop') // 当前播放类型
   const [isPlaylistShow, setIsPlaylistShow] = useState(false)
 
-  const { songInfo } = useSelector(
+  const { songInfo, lyricList, currentLyric } = useSelector(
     state => ({
-      songInfo: state.song.songInfo
+      songInfo: state.song.songInfo,
+      lyricList: state.song.lyricList,
+      currentLyric: state.song.currentLyric
     }),
     shallowEqual
   )
@@ -42,9 +44,12 @@ const AppPlayBar = memo(() => {
 
   // 歌曲播放，滑块更新进度
   const handleUpdate = e => {
-    ;+e.target.currentTime > 0 && setCurrentTime(+(+e.target.currentTime * 1000).toFixed(0))
+    const timeStamp = +(+e.target.currentTime * 1000).toFixed(0)
+
+    ;+e.target.currentTime > 0 && setCurrentTime(timeStamp)
 
     if (e.target.ended) {
+      // 当前一首正常播放完成
       console.log('end')
       switch (type) {
         case 'loop':
@@ -65,6 +70,22 @@ const AppPlayBar = memo(() => {
       }
       setCurrentTime(0)
       audioRef.current.play()
+    }
+
+    // 歌词滚动效果
+    if (timeStamp > lyricList[currentLyric].time * 10 && currentLyric + 1 < lyricList.length) {
+      let index = currentLyric
+      while (timeStamp > lyricList[++index].time * 10) {
+        console.log('累加1次')
+      }
+      dispatch(setCurrentLyricAction(index))
+    }
+    if (currentLyric !== 0 && timeStamp < lyricList[currentLyric - 1].time * 10) {
+      let index = currentLyric
+      while (timeStamp < lyricList[--index].time * 10) {
+        console.log('累减1次')
+      }
+      dispatch(setCurrentLyricAction(index))
     }
   }
 
@@ -93,7 +114,7 @@ const AppPlayBar = memo(() => {
         <audio ref={audioRef} src={songInfo.url} onTimeUpdate={handleUpdate} />
 
         {/* 底部播放列表 */}
-        {isPlaylistShow && <PlayList togglePlaylistShow={e => setIsPlaylistShow(false)} />}
+        {isPlaylistShow && <PlayList currentTime={currentTime} togglePlaylistShow={e => setIsPlaylistShow(false)} />}
       </div>
     </BarWrapper>
   )
