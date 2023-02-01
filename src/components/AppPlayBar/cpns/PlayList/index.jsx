@@ -57,7 +57,7 @@ const AppPlayList = memo(props => {
           <div className="main-playlist nice_scroll">
             {!isEmpty(playlist) ? (
               playlist.map((item, index) => (
-                <PlaylistItem key={item.id} isActive={currentIndex === index ? 'active' : ''} {...item} />
+                <PlaylistItem key={item.id} isActive={currentIndex === index ? 'active' : ''} {...item} index={index} />
               ))
             ) : (
               <h2 className="null">当前播放列表为空~</h2>

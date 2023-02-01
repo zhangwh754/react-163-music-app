@@ -21,6 +21,7 @@ export const BarWrapper = styled.div`
 `
 
 export const Head = styled.div`
+  position: relative;
   margin: 6px 15px 0 0;
   display: flex;
   justify-content: center;

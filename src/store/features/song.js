@@ -11,9 +11,6 @@ export const getSongDetail = createAsyncThunk('getSongDetail', async (payload = 
   // 获取歌曲url
   const res2 = await fetchSongUrl(payload)
 
-  // 获取歌曲歌词
-  const res3 = await fetchSongLyric(payload)
-
   const result = {
     id: res.id,
     picUrl: res.al.picUrl,
@@ -21,27 +18,25 @@ export const getSongDetail = createAsyncThunk('getSongDetail', async (payload = 
     author: res.ar[0].name,
     dt: +res.dt, // 总时长
     url: res2.data[0].url //播放Url
-    // lyric: res3.lrc.lyric
   }
+
+  dispatch(setSongInfoAction(result))
+
+  // 获取歌曲歌词，并格式化为数组
+  const res3 = await fetchSongLyric(payload)
 
   dispatch(setLyricListAction(handleLyric(res3.lrc.lyric)))
 
-  dispatch(setSongInfoAction(result))
+  // 重置歌词索引
+  dispatch(setCurrentLyricAction(0))
 })
 
 const songSlice = createSlice({
   name: 'login',
   initialState: {
     songInfo: {},
-    playlist: [
-      {
-        id: 30780536,
-        name: '星屑の砂時計',
-        author: 'yu-yu',
-        dt: 346733
-      }
-    ], // 播放列表
-    currentIndex: 0, // 当前播放列表激活的歌曲索引
+    playlist: JSON.parse(localStorage.getItem('playlist')) || [], // 播放列表
+    currentIndex: -1, // 当前播放列表激活的歌曲索引
     lyricList: [], // 当前播放歌曲歌词数组
     currentLyric: 0 // 当前播放歌曲歌词索引
   },
@@ -57,18 +52,31 @@ const songSlice = createSlice({
       if (state.playlist.findIndex(item => item.id === id) === -1) {
         state.playlist = state.playlist.concat(payload)
       }
+
+      // 存储到本地
+      localStorage.setItem('playlist', JSON.stringify(state.playlist.concat(payload)))
     },
     // 2、设置当前播放歌曲的歌词
     setLyricListAction(state, { payload }) {
       state.lyricList = payload
     },
-    // 3、设置索引
+    // 3、设置歌曲索引
     setCurrentLyricAction(state, { payload }) {
       state.currentLyric = payload
+    },
+    // 4、设置播放列表当前播放的索引
+    setCurrentIndexAction(state, { payload }) {
+      state.currentIndex = payload
     }
   }
 })
 
-export const { setSongInfoAction, pushPlaylistAction, setLyricListAction, setCurrentLyricAction } = songSlice.actions
+export const {
+  setSongInfoAction,
+  pushPlaylistAction,
+  setLyricListAction,
+  setCurrentLyricAction,
+  setCurrentIndexAction
+} = songSlice.actions
 
 export default songSlice.reducer

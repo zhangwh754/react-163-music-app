@@ -5,19 +5,21 @@ import { NavLink } from 'react-router-dom'
 import { BarWrapper, Head, Time } from './style'
 import Control from './cpns/Control'
 import Slide from './cpns/Slide'
-import { formatDate } from '@/utils'
+import { formatDate, isEmpty } from '@/utils'
 import Control2 from './cpns/Control2'
-import { getSongDetail, setCurrentLyricAction } from '@/store/features/song'
+import { setCurrentLyricAction } from '@/store/features/song'
 import PlayList from './cpns/PlayList'
+import defaultImg from '@/assets/img/default_album.jpg'
 
 const AppPlayBar = memo(() => {
   const [isPlaying, setIsPlaying] = useState(false) // 是否正在播放
   const [type] = useState('loop') // 当前播放类型
   const [isPlaylistShow, setIsPlaylistShow] = useState(false)
 
-  const { songInfo, lyricList, currentLyric } = useSelector(
+  const { songInfo, lyricList, currentLyric, currentIndex } = useSelector(
     state => ({
       songInfo: state.song.songInfo,
+      currentIndex: state.song.currentIndex,
       lyricList: state.song.lyricList,
       currentLyric: state.song.currentLyric
     }),
@@ -32,15 +34,25 @@ const AppPlayBar = memo(() => {
 
   // 组件挂载 请求歌曲信息
   useEffect(() => {
-    dispatch(getSongDetail(30780536))
+    // dispatch(getSongDetail(30780536))
     audioRef.current.volume = 0.3
   }, [dispatch])
 
   // 组件挂载 初始化audio组件
   useEffect(() => {
     audioRef.current.volume = 0.3
+  }, [])
+
+  // 切换歌曲
+  useEffect(() => {
+    if (currentIndex === -1 || !songInfo.url) return // 初始化不能播放
     audioRef.current.src = songInfo.url
-  }, [audioRef, songInfo.url])
+    audioRef.current.currentTime = 0
+    setCurrentTime(0)
+    audioRef.current.play()
+
+    setIsPlaying(true)
+  }, [songInfo.url, currentIndex])
 
   // 歌曲播放，滑块更新进度
   const handleUpdate = e => {
@@ -50,6 +62,7 @@ const AppPlayBar = memo(() => {
 
     if (e.target.ended) {
       // 当前一首正常播放完成
+      setIsPlaying(false)
       console.log('end')
       switch (type) {
         case 'loop':
@@ -71,6 +84,8 @@ const AppPlayBar = memo(() => {
       setCurrentTime(0)
       audioRef.current.play()
     }
+
+    if (isEmpty(lyricList)) return
 
     // 歌词滚动效果
     if (timeStamp > lyricList[currentLyric].time * 10 && currentLyric + 1 < lyricList.length) {
@@ -97,13 +112,14 @@ const AppPlayBar = memo(() => {
         {/* 封面 */}
         <Head>
           <NavLink to={'/discover/song'}>
-            <img src={songInfo.picUrl} alt={songInfo.name} title={songInfo.name} />
+            <img src={songInfo.picUrl || defaultImg} alt={songInfo.name} title={songInfo.name} />
+            <div className="image_cover">{songInfo.name}</div>
           </NavLink>
         </Head>
         {/* 滑块及歌曲信息 */}
         <Slide {...songInfo} currentTime={currentTime} audioRef={audioRef} setCurrentTime={setCurrentTime} />
         {/* 进度时间 */}
-        <Time>
+        <Time style={{ visibility: isEmpty(songInfo) && 'hidden' }}>
           <span className="now-time">{formatDate(currentTime, 'mm:ss')}</span>
           <span className="total-time"> / {songInfo.dt && formatDate(songInfo.dt, 'mm:ss')}</span>
         </Time>

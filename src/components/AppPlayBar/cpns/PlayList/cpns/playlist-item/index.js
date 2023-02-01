@@ -4,13 +4,23 @@ import { DownloadOutlined, DeleteOutlined, LikeOutlined } from '@ant-design/icon
 
 import { PlaylistItemWrapper } from './style'
 import { formatDate } from '@/utils'
+import { useDispatch } from 'react-redux'
+import { getSongDetail, setCurrentIndexAction } from '@/store/features/song'
 
 const PlaylistItem = memo(props => {
   // props/state
-  const { name, author, dt, isActive } = props
+  const { name, author, dt, isActive, index, id } = props
+
+  const dispatch = useDispatch()
+
+  const handlePlay = () => {
+    dispatch(setCurrentIndexAction(index))
+
+    dispatch(getSongDetail(id))
+  }
 
   return (
-    <PlaylistItemWrapper className={isActive}>
+    <PlaylistItemWrapper className={isActive} onDoubleClickCapture={e => handlePlay()}>
       <div className="song-name">{name}</div>
       <div className="control-and-singer">
         <LikeOutlined />
