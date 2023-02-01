@@ -42,3 +42,21 @@ export function formatDate(time, fmt) {
 function padLeftZero(str) {
   return ('00' + str).substr(str.length)
 }
+
+/**
+ * @description: 对歌词进行处理
+ * @return: [{time, text}, {time, text}]
+ */
+export const handleLyric = str => {
+  const arr = str.split('\n')
+
+  if (arr[arr.length - 1] === '') arr.pop()
+
+  return arr.map(line => {
+    const timeArr = line.slice(0, 11).slice(1, -2).split(':')
+    const time = (+timeArr[0] * 60 + +timeArr[1]) * 100
+    const text = line.slice(11)
+
+    return { time, text }
+  })
+}

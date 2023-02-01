@@ -3,7 +3,9 @@ import React, { memo } from 'react'
 
 import { ControlWrapper } from './style'
 
-const Control2 = memo(() => {
+const Control2 = memo(props => {
+  const { togglePlaylistShow } = props
+
   return (
     <ControlWrapper className="sprite_player">
       <Tooltip title="收藏">
@@ -14,7 +16,7 @@ const Control2 = memo(() => {
         <button className="sprite_player loop"></button>
       </Tooltip>
       <Tooltip title="播放列表">
-        <button className="sprite_player playlist"></button>
+        <button className="sprite_player playlist" onClick={togglePlaylistShow}></button>
       </Tooltip>
     </ControlWrapper>
   )

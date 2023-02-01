@@ -1,10 +1,20 @@
+import { pushPlaylistAction } from '@/store/features/song'
 import { getSizeImage } from '@/utils'
 import React, { memo } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { ItemWrapper } from './style'
 
 const ListItem = memo(props => {
   const { playlist, playlistInfo } = props
+
+  const dispatch = useDispatch()
+
+  // 添加到播放列表
+  const handleAddTo = (e, item) => {
+    e.preventDefault()
+    dispatch(pushPlaylistAction(item))
+  }
 
   return (
     <ItemWrapper>
@@ -39,7 +49,7 @@ const ListItem = memo(props => {
               <a href="/discover/recommend" className="sprite_02 btn play">
                 {item.name}
               </a>
-              <a href="/discover/recommend" className="sprite_icon2 btn addto">
+              <a href="/discover/recommend" className="sprite_icon2 btn addto" onClick={e => handleAddTo(e, item)}>
                 {item.name}
               </a>
               <a href="/play" className="sprite_02 btn favourite">

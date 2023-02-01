@@ -8,10 +8,12 @@ import Slide from './cpns/Slide'
 import { formatDate } from '@/utils'
 import Control2 from './cpns/Control2'
 import { getSongDetail } from '@/store/features/song'
+import PlayList from './cpns/PlayList'
 
 const AppPlayBar = memo(() => {
   const [isPlaying, setIsPlaying] = useState(false) // 是否正在播放
-  const [type, setType] = useState('loop')
+  const [type, setType] = useState('loop') // 当前播放类型
+  const [isPlaylistShow, setIsPlaylistShow] = useState(false)
 
   const { songInfo } = useSelector(
     state => ({
@@ -85,10 +87,13 @@ const AppPlayBar = memo(() => {
           <span className="total-time"> / {songInfo.dt && formatDate(songInfo.dt, 'mm:ss')}</span>
         </Time>
         {/* 右侧按钮 */}
-        <Control2 />
+        <Control2 togglePlaylistShow={e => setIsPlaylistShow(!isPlaylistShow)} />
 
         {/* 媒体标签 */}
         <audio ref={audioRef} src={songInfo.url} onTimeUpdate={handleUpdate} />
+
+        {/* 底部播放列表 */}
+        {isPlaylistShow && <PlayList togglePlaylistShow={e => setIsPlaylistShow(false)} />}
       </div>
     </BarWrapper>
   )

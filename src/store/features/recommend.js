@@ -35,10 +35,12 @@ export const getRecommendData = createAsyncThunk('getRecommendData', async (payl
   const playListDetail = await Promise.all(['19723756', '3779629', '2884035'].map(id => fetchPlayListDetail(id)))
   dispatch(setPlaylistInfoAction(playListDetail.map(item => pick(item, ['id', 'name', 'coverImgUrl']))))
   const idsArr = playListDetail.map(list => list.trackIds.slice(0, 10).map(item => item.id))
-  // 根据id拿取歌曲的名字
+  // 根据id拿取歌曲的名字、作者、时长
   let playlistData = []
   for (let i = 0; i < idsArr.length; i++) {
-    playlistData[i] = (await fetchSongDetail(idsArr[i])).map(item => pick(item, ['id', 'name']))
+    playlistData[i] = (await fetchSongDetail(idsArr[i])).map(item =>
+      Object.assign(pick(item, ['id', 'name', 'dt']), { artist: item.ar[0].name })
+    )
   }
   dispatch(setPlaylistAction(playlistData))
 })
