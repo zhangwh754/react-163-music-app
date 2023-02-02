@@ -59,9 +59,9 @@ export const handleLyric = str => {
     if (line) {
       const result = parseExp.exec(line)
       if (!result) continue
-      const time1 = result[1] * 60 * 1000
-      const time2 = result[2] * 1000
-      const time3 = result[3].length > 2 ? result[3] * 1 : result[3] * 1000
+      const time1 = result[1] * 60 * 100
+      const time2 = result[2] * 100
+      const time3 = result[3].length > 2 ? result[3] * 1 : result[3] * 100
       // 当前歌曲播放的总时长(毫秒)
       const time = time1 + time2 + time3
       const text = line.replace(parseExp, '').trim()

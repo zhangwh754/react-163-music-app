@@ -51,23 +51,14 @@ const songSlice = createSlice({
     },
     // 1、给播放列表推入新的歌曲（id、name、dt、artist）
     pushPlaylistAction(state, { payload }) {
-      let arr
+      // 不存在，就推入
+      if (state.playlist.findIndex(item => item.id === payload.id) === -1) {
+        const arr2 = state.playlist.concat([payload])
 
-      // 如果传入的是一个数组，对每一项查重
-      if (Array.isArray(payload)) {
-        arr = payload.filter(_item => state.playlist.findIndex(item => item.id === _item.id) === -1)
+        state.playlist = arr2
+        // 存储到本地
+        localStorage.setItem('playlist', JSON.stringify(arr2))
       }
-      // 一首歌也查重
-      else if (state.playlist.findIndex(item => item.id === payload.id) === -1) {
-        // 不存在，就推入
-        arr = [payload]
-      }
-
-      const arr2 = state.playlist.concat(arr)
-
-      state.playlist = arr2
-      // 存储到本地
-      localStorage.setItem('playlist', JSON.stringify(arr2))
     },
     // 2、设置当前播放歌曲的歌词
     setLyricListAction(state, { payload }) {

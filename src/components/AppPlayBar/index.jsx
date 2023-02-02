@@ -5,25 +5,26 @@ import { NavLink } from 'react-router-dom'
 import { BarWrapper, Head, Time } from './style'
 import Control from './cpns/Control'
 import Slide from './cpns/Slide'
-import { formatDate, isEmpty } from '@/utils'
+import { formatDate, isEmpty, getNotRepeatedInteger } from '@/utils'
 import Control2 from './cpns/Control2'
-import { setCurrentLyricAction } from '@/store/features/song'
+import { getSongDetail, setCurrentIndexAction, setCurrentLyricAction } from '@/store/features/song'
 import PlayList from './cpns/PlayList'
 import defaultImg from '@/assets/img/default_album.jpg'
 
 const AppPlayBar = memo(() => {
   const [isPlaying, setIsPlaying] = useState(false) // 是否正在播放
-  const [type] = useState('loop') // 当前播放类型
   const [isPlaylistShow, setIsPlaylistShow] = useState(false) // 是否显示播放列表
   const [currentTime, setCurrentTime] = useState(0) // 当前播放时间
+  const [typeIndex, setTypeIndex] = useState(0) // 当前播放类型
 
   // redux hooks
-  const { songInfo, lyricList, currentLyric, playlist } = useSelector(
+  const { songInfo, lyricList, currentLyric, playlist, currentIndex } = useSelector(
     state => ({
       songInfo: state.song.songInfo,
       lyricList: state.song.lyricList,
       currentLyric: state.song.currentLyric,
-      playlist: state.song.playlist
+      playlist: state.song.playlist,
+      currentIndex: state.song.currentIndex
     }),
     shallowEqual
   )
@@ -36,7 +37,7 @@ const AppPlayBar = memo(() => {
     audioRef.current.volume = 0.3
   }, [])
 
-  // 切换歌曲
+  // 切换歌曲（即触发了getSongDetail事件）
   useEffect(() => {
     if (!songInfo.url) return // 初始化不能播放
     audioRef.current.src = songInfo.url
@@ -58,38 +59,42 @@ const AppPlayBar = memo(() => {
 
     ;+e.target.currentTime > 0 && setCurrentTime(timeStamp)
 
+    // 当前一首正常播放完成,进入下一首
     if (e.target.ended) {
-      // 当前一首正常播放完成
       setIsPlaying(false)
-      console.log('end')
-      switch (type) {
-        case 'loop':
-          console.log('loop') // 单曲循环
+
+      let index
+      // eslint-disable-next-line default-case
+      switch (typeIndex) {
+        case 0:
+          console.log('顺序播放') // 顺序播放
+          index = currentIndex + 1
+          if (index >= playlist.length) index = 0
+          if (index < 0) index = playlist.length - 1
           break
-        case 'order':
-          console.log('order') // 顺序播放
+        case 1:
+          console.log('随机播放') // 随机播放
+          index = getNotRepeatedInteger(0, playlist.length - 1)
           break
-        case 'list-loop':
-          console.log('list-loop') // 列表循环
-          break
-        case 'random':
-          console.log('random') // 随机播放
-          break
-        default:
-          console.log('需要是loop、order、list-loop、random的一种')
+        case 2:
+          console.log('单曲循环') // 单曲循环
           break
       }
+
+      dispatch(setCurrentIndexAction(index))
+
+      typeIndex !== 2 && dispatch(getSongDetail(playlist[index].id))
+
       setCurrentTime(0)
       audioRef.current.play()
     }
 
+    // 歌词滚动效果，比对当前和存储的歌词时间表
     if (isEmpty(lyricList)) return
 
-    // 歌词滚动效果
     if (timeStamp > lyricList[currentLyric].time * 10 && currentLyric + 1 < lyricList.length) {
       let index = currentLyric
-      console.log(index, lyricList[index].text)
-      while (lyricList[index + 1].time && timeStamp > lyricList[index + 1].time * 10) {
+      while (lyricList?.[index + 1]?.time && timeStamp > lyricList[index].time * 10) {
         console.log('累加1次')
         index++
       }
@@ -97,7 +102,7 @@ const AppPlayBar = memo(() => {
     }
     if (currentLyric !== 0 && timeStamp < lyricList[currentLyric - 1].time * 10) {
       let index = currentLyric
-      while (lyricList[index - 1].time && timeStamp < lyricList[index - 1].time * 10) {
+      while (lyricList?.[index - 1]?.time && timeStamp < lyricList[index].time * 10) {
         console.log('累减1次')
         index--
       }
@@ -109,7 +114,12 @@ const AppPlayBar = memo(() => {
     <BarWrapper className="sprite_player">
       <div className="content">
         {/* 左侧按钮 */}
-        <Control handlePlayStatus={e => setIsPlaying(!isPlaying)} isPlaying={isPlaying} audioRef={audioRef} />
+        <Control
+          typeIndex={typeIndex}
+          isPlaying={isPlaying}
+          audioRef={audioRef}
+          handlePlayStatus={e => setIsPlaying(!isPlaying)}
+        />
         {/* 封面 */}
         <Head>
           <NavLink to={'/discover/song'}>
@@ -125,7 +135,12 @@ const AppPlayBar = memo(() => {
           <span className="total-time"> / {songInfo.dt && formatDate(songInfo.dt, 'mm:ss')}</span>
         </Time>
         {/* 右侧按钮 */}
-        <Control2 count={playlist.length} togglePlaylistShow={e => setIsPlaylistShow(!isPlaylistShow)} />
+        <Control2
+          count={playlist.length}
+          typeIndex={typeIndex}
+          setTypeIndex={setTypeIndex}
+          togglePlaylistShow={e => setIsPlaylistShow(!isPlaylistShow)}
+        />
 
         {/* 媒体标签 */}
         <audio ref={audioRef} src={songInfo.url} onTimeUpdate={handleUpdate} />

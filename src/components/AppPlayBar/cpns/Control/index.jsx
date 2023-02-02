@@ -3,9 +3,10 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 
 import { ControlWrapper } from './style'
 import { getSongDetail, setCurrentIndexAction } from '@/store/features/song'
+import { getNotRepeatedInteger } from '@/utils'
 
 const Control = memo(props => {
-  const { isPlaying, audioRef, handlePlayStatus } = props
+  const { isPlaying, audioRef, handlePlayStatus, typeIndex } = props
 
   // redux hook
   const { playlist, currentIndex, songInfo } = useSelector(
@@ -31,9 +32,14 @@ const Control = memo(props => {
 
   // 切换上一首下一首，修改redux内的索引
   const handleChangeIndex = (isNext = true) => {
-    let index = isNext ? currentIndex + 1 : currentIndex - 1
-    if (index >= playlist.length) index = 0
-    if (index < 0) index = playlist.length - 1
+    let index
+    if (typeIndex !== 1) {
+      index = isNext ? currentIndex + 1 : currentIndex - 1
+      if (index >= playlist.length) index = 0
+      if (index < 0) index = playlist.length - 1
+    } else {
+      index = getNotRepeatedInteger(currentIndex, 0, playlist.length - 1)
+    }
 
     handleDispatchPlay(index)
   }

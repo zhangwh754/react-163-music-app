@@ -39,7 +39,7 @@ export const ControlWrapper = styled.div`
 
   .loop {
     background-position: ${props => {
-      switch (props.playSequence) {
+      switch (props.typeIndex) {
         case 1:
           return '-66px -248px;'
         case 2:
