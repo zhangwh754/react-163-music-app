@@ -18,10 +18,9 @@ const AppPlayBar = memo(() => {
   const [currentTime, setCurrentTime] = useState(0) // 当前播放时间
 
   // redux hooks
-  const { songInfo, lyricList, currentLyric, currentIndex, playlist } = useSelector(
+  const { songInfo, lyricList, currentLyric, playlist } = useSelector(
     state => ({
       songInfo: state.song.songInfo,
-      currentIndex: state.song.currentIndex,
       lyricList: state.song.lyricList,
       currentLyric: state.song.currentLyric,
       playlist: state.song.playlist
@@ -84,22 +83,23 @@ const AppPlayBar = memo(() => {
       audioRef.current.play()
     }
 
-    return
-
     if (isEmpty(lyricList)) return
 
     // 歌词滚动效果
     if (timeStamp > lyricList[currentLyric].time * 10 && currentLyric + 1 < lyricList.length) {
       let index = currentLyric
-      while (lyricList[index + 1].time && timeStamp > lyricList[++index].time * 10) {
+      console.log(index, lyricList[index].text)
+      while (lyricList[index + 1].time && timeStamp > lyricList[index + 1].time * 10) {
         console.log('累加1次')
+        index++
       }
       dispatch(setCurrentLyricAction(index))
     }
     if (currentLyric !== 0 && timeStamp < lyricList[currentLyric - 1].time * 10) {
       let index = currentLyric
-      while (lyricList[index - 1].time && timeStamp < lyricList[--index].time * 10) {
+      while (lyricList[index - 1].time && timeStamp < lyricList[index - 1].time * 10) {
         console.log('累减1次')
+        index--
       }
       dispatch(setCurrentLyricAction(index))
     }

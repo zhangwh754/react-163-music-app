@@ -12,11 +12,10 @@ const PlaylistItem = memo(props => {
   const { name, artist, dt, isActive, index, id } = props
 
   // redux hooks
-  const { playlist, currentIndex, songInfo } = useSelector(
+  const { playlist, currentIndex } = useSelector(
     state => ({
       playlist: state.song.playlist,
-      currentIndex: state.song.currentIndex,
-      songInfo: state.song.songInfo
+      currentIndex: state.song.currentIndex
     }),
     shallowEqual
   )

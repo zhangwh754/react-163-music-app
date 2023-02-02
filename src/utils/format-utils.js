@@ -43,6 +43,7 @@ function padLeftZero(str) {
   return ('00' + str).substr(str.length)
 }
 
+const parseExp = /\[([0-9]{2}):([0-9]{2})\.([0-9]{2,3})\]/
 /**
  * @description: 对歌词进行处理
  * @return: [{time, text}, {time, text}]
@@ -50,13 +51,23 @@ function padLeftZero(str) {
 export const handleLyric = str => {
   const arr = str.split('\n')
 
+  const lyricList = []
+
   if (arr[arr.length - 1] === '') arr.pop()
 
-  return arr.map(line => {
-    const timeArr = line.slice(0, 11).slice(1, -2).split(':')
-    const time = (+timeArr[0] * 60 + +timeArr[1]) * 100
-    const text = line.slice(11)
+  for (const line of arr) {
+    if (line) {
+      const result = parseExp.exec(line)
+      if (!result) continue
+      const time1 = result[1] * 60 * 1000
+      const time2 = result[2] * 1000
+      const time3 = result[3].length > 2 ? result[3] * 1 : result[3] * 1000
+      // 当前歌曲播放的总时长(毫秒)
+      const time = time1 + time2 + time3
+      const text = line.replace(parseExp, '').trim()
+      lyricList.push({ time, text })
+    }
+  }
 
-    return { time, text }
-  })
+  return lyricList
 }

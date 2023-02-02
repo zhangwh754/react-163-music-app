@@ -51,7 +51,6 @@ const songSlice = createSlice({
     },
     // 1、给播放列表推入新的歌曲（id、name、dt、artist）
     pushPlaylistAction(state, { payload }) {
-      const id = payload.id
       let arr
 
       // 如果传入的是一个数组，对每一项查重
@@ -59,7 +58,7 @@ const songSlice = createSlice({
         arr = payload.filter(_item => state.playlist.findIndex(item => item.id === _item.id) === -1)
       }
       // 一首歌也查重
-      else if (state.playlist.findIndex(item => item.id === id) === -1) {
+      else if (state.playlist.findIndex(item => item.id === payload.id) === -1) {
         // 不存在，就推入
         arr = [payload]
       }
