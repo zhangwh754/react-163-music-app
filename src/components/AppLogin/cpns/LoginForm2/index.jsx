@@ -5,7 +5,7 @@ import { Button, Form, Input } from 'antd'
 import { MobileOutlined, UserOutlined } from '@ant-design/icons'
 
 import { FormWrapper } from './style'
-import { fetchCaptcha, fetchLogin } from '@/services/module/login'
+import { fetchCaptcha, fetchLogin } from '@/services/module/account'
 
 const LoginForm2 = memo(() => {
   const [form] = Form.useForm()

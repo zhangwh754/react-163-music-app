@@ -17,8 +17,8 @@ import LeftTopList from './cpns/LeftTopList'
 const Recommend = memo(() => {
   const { banner, isLogin, userInfo, hotRecommend, topAlbum, playlist, playlistInfo } = useSelector(
     state => ({
-      isLogin: state.login.isLogin,
-      userInfo: state.login.userInfo,
+      isLogin: state.account.isLogin,
+      userInfo: state.account.userInfo,
       banner: state.recommend.banner,
       hotRecommend: state.recommend.hotRecommend,
       topAlbum: state.recommend.topAlbum,

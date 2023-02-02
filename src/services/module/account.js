@@ -78,3 +78,23 @@ export const fetchLoginStatus = (payload = '') => {
 //       break
 //   }
 // }
+
+// 签到接口
+// export const fetch_daily_Sign = cookie => {
+//   return request.post({
+//     url: '/daily_signin',
+//     data: {
+//       cookie
+//     }
+//   })
+// }
+
+// 获取用户账号信息接口
+export const getUserDetail = cookie => {
+  return request.post({
+    url: '/user/account',
+    data: {
+      cookie
+    }
+  })
+}

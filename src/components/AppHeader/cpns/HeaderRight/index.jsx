@@ -5,7 +5,7 @@ import { SearchOutlined } from '@ant-design/icons'
 
 import { RightWrapper } from './style'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { getUserInfo } from '@/store/features/login'
+import { getUserInfo } from '@/store/features/account'
 // import KeyBoard from '@/assets/svg/KeyBoard'
 
 const HeaderRight = memo(() => {
@@ -15,8 +15,8 @@ const HeaderRight = memo(() => {
 
   const { isLogin, userInfo } = useSelector(
     state => ({
-      isLogin: state.login.isLogin,
-      userInfo: state.login.userInfo
+      isLogin: state.account.isLogin,
+      userInfo: state.account.userInfo
     }),
     shallowEqual
   )

@@ -5,8 +5,8 @@ import React, { memo, useEffect, useRef } from 'react'
 
 import { FormWrapper } from './style'
 import { message } from 'antd'
-import { fetchQrImg, fetchQrKey, fetchQrStatus } from '@/services/module/login'
-import { getUserInfo } from '@/store/features/login'
+import { fetchQrImg, fetchQrKey, fetchQrStatus } from '@/services/module/account'
+import { getUserInfo } from '@/store/features/account'
 
 const LoginForm3 = memo(() => {
   const [messageApi, contextHolder] = message.useMessage()

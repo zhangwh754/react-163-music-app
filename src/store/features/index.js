@@ -1,5 +1,5 @@
 import recommendReducer from './recommend'
-import loginReducer from './login'
+import accountReducer from './account'
 import songReducer from './song'
 
-export { recommendReducer, loginReducer, songReducer }
+export { recommendReducer, accountReducer, songReducer }

@@ -1,12 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { message } from 'antd'
 
-import { fetchLoginStatus } from '@/services/module/login'
+import { fetchLoginStatus, fetch_daily_Sign, getUserDetail } from '@/services/module/account'
 import { isEmpty } from '@/utils'
 
-export const getUserInfo = createAsyncThunk('getUserInfo', async (payload, { dispatch }) => {
-  const cookie = localStorage.getItem('wy-cookie')
+// 获取cookie
+const cookie = localStorage.getItem('wy-cookie')
 
+// 获取用户信息
+export const getUserInfo = createAsyncThunk('getUserInfo', async (payload, { dispatch }) => {
   const res = await fetchLoginStatus(cookie)
+
+  const res2 = await getUserDetail(cookie)
+
+  console.log(res2, ' @')
 
   dispatch(setUserInfoAction(res.data.profile))
 

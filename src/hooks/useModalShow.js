@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 
-import { setLoginPanelShowAction } from '@/store/features/login'
+import { setLoginPanelShowAction } from '@/store/features/account'
 
 const useModalShow = () => {
   const dispatch = useDispatch()

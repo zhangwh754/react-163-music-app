@@ -11,7 +11,7 @@ import LoginForm3 from './cpns/LoginForm3'
 const AppLogin = memo(() => {
   const { isLoginPanelShow } = useSelector(
     state => ({
-      isLoginPanelShow: state.login.isLoginPanelShow
+      isLoginPanelShow: state.account.isLoginPanelShow
     }),
     shallowEqual
   )
