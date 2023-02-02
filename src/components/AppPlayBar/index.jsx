@@ -74,7 +74,7 @@ const AppPlayBar = memo(() => {
           break
         case 1:
           console.log('随机播放') // 随机播放
-          index = getNotRepeatedInteger(0, playlist.length - 1)
+          index = getNotRepeatedInteger(currentIndex, 0, playlist.length - 1)
           break
         case 2:
           console.log('单曲循环') // 单曲循环
