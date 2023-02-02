@@ -4,7 +4,6 @@ export const ControlWrapper = styled.div`
   display: flex;
   align-items: center;
   padding-top: 6px;
-  width: 137px;
   background-position: -119px -243px;
 
   .play,
@@ -32,6 +31,10 @@ export const ControlWrapper = styled.div`
 
   .playlist {
     background-position: -42px -68px;
+    width: 60px;
+    color: #ccc;
+    padding-left: 20px;
+    line-height: 25px;
   }
 
   .loop {

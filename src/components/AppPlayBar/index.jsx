@@ -14,29 +14,23 @@ import defaultImg from '@/assets/img/default_album.jpg'
 const AppPlayBar = memo(() => {
   const [isPlaying, setIsPlaying] = useState(false) // 是否正在播放
   const [type] = useState('loop') // 当前播放类型
-  const [isPlaylistShow, setIsPlaylistShow] = useState(false)
+  const [isPlaylistShow, setIsPlaylistShow] = useState(false) // 是否显示播放列表
+  const [currentTime, setCurrentTime] = useState(0) // 当前播放时间
 
-  const { songInfo, lyricList, currentLyric, currentIndex } = useSelector(
+  // redux hooks
+  const { songInfo, lyricList, currentLyric, currentIndex, playlist } = useSelector(
     state => ({
       songInfo: state.song.songInfo,
       currentIndex: state.song.currentIndex,
       lyricList: state.song.lyricList,
-      currentLyric: state.song.currentLyric
+      currentLyric: state.song.currentLyric,
+      playlist: state.song.playlist
     }),
     shallowEqual
   )
-
-  const [currentTime, setCurrentTime] = useState(0)
-
   const dispatch = useDispatch()
 
   const audioRef = useRef()
-
-  // 组件挂载 请求歌曲信息
-  useEffect(() => {
-    // dispatch(getSongDetail(30780536))
-    audioRef.current.volume = 0.3
-  }, [dispatch])
 
   // 组件挂载 初始化audio组件
   useEffect(() => {
@@ -45,14 +39,19 @@ const AppPlayBar = memo(() => {
 
   // 切换歌曲
   useEffect(() => {
-    if (currentIndex === -1 || !songInfo.url) return // 初始化不能播放
+    if (!songInfo.url) return // 初始化不能播放
     audioRef.current.src = songInfo.url
     audioRef.current.currentTime = 0
     setCurrentTime(0)
-    audioRef.current.play()
+
+    audioRef.current.load()
+
+    setTimeout(function () {
+      audioRef.current.play()
+    }, 200)
 
     setIsPlaying(true)
-  }, [songInfo.url, currentIndex])
+  }, [songInfo.url])
 
   // 歌曲播放，滑块更新进度
   const handleUpdate = e => {
@@ -85,19 +84,21 @@ const AppPlayBar = memo(() => {
       audioRef.current.play()
     }
 
+    return
+
     if (isEmpty(lyricList)) return
 
     // 歌词滚动效果
     if (timeStamp > lyricList[currentLyric].time * 10 && currentLyric + 1 < lyricList.length) {
       let index = currentLyric
-      while (timeStamp > lyricList[++index].time * 10) {
+      while (lyricList[index + 1].time && timeStamp > lyricList[++index].time * 10) {
         console.log('累加1次')
       }
       dispatch(setCurrentLyricAction(index))
     }
     if (currentLyric !== 0 && timeStamp < lyricList[currentLyric - 1].time * 10) {
       let index = currentLyric
-      while (timeStamp < lyricList[--index].time * 10) {
+      while (lyricList[index - 1].time && timeStamp < lyricList[--index].time * 10) {
         console.log('累减1次')
       }
       dispatch(setCurrentLyricAction(index))
@@ -124,7 +125,7 @@ const AppPlayBar = memo(() => {
           <span className="total-time"> / {songInfo.dt && formatDate(songInfo.dt, 'mm:ss')}</span>
         </Time>
         {/* 右侧按钮 */}
-        <Control2 togglePlaylistShow={e => setIsPlaylistShow(!isPlaylistShow)} />
+        <Control2 count={playlist.length} togglePlaylistShow={e => setIsPlaylistShow(!isPlaylistShow)} />
 
         {/* 媒体标签 */}
         <audio ref={audioRef} src={songInfo.url} onTimeUpdate={handleUpdate} />

@@ -6,7 +6,7 @@ export const PlaylistItemWrapper = styled.div`
   padding-left: 15px;
   height: 28px;
   cursor: pointer;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-top: 2px;
   color: #ccc;
 
@@ -21,16 +21,15 @@ export const PlaylistItemWrapper = styled.div`
     height: 28px;
     text-align: left;
     line-height: 28px;
-    text-indent: -18px;
   }
 
   .control-and-singer {
+    margin-left: -18px;
     display: flex;
 
     .anticon-delete,
     .anticon-download,
-    .anticon-like,
-    .anticon-github {
+    .anticon-like {
       opacity: 0;
       color: #ccc;
       font-size: 14px;
@@ -39,9 +38,8 @@ export const PlaylistItemWrapper = styled.div`
 
     .anticon-delete:hover,
     .anticon-download:hover,
-    span:hover,
     .anticon-like:hover,
-    .anticon-github:hover {
+    span:hover {
       color: #fff;
     }
 
@@ -52,8 +50,11 @@ export const PlaylistItemWrapper = styled.div`
 
   &:hover .anticon-delete,
   &:hover .anticon-download,
-  &:hover .anticon-like,
-  &:hover .anticon-github {
+  &:hover .anticon-like {
     opacity: 1;
+  }
+
+  .duration {
+    margin-right: 18px;
   }
 `

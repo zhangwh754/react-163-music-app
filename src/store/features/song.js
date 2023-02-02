@@ -4,7 +4,9 @@ import { fetchSongDetail } from '@/services/module/recommend'
 import { fetchSongLyric, fetchSongUrl } from '@/services/module/song'
 import { handleLyric } from '@/utils'
 
-export const getSongDetail = createAsyncThunk('getSongDetail', async (payload = 167876, { dispatch }) => {
+export const getSongDetail = createAsyncThunk('getSongDetail', async (payload, { dispatch }) => {
+  if (!payload) return
+
   // 获取歌曲详情
   const [res] = await fetchSongDetail([payload])
 
@@ -15,7 +17,7 @@ export const getSongDetail = createAsyncThunk('getSongDetail', async (payload = 
     id: res.id,
     picUrl: res.al.picUrl,
     name: res.name,
-    author: res.ar[0].name,
+    artist: res.ar[0].name,
     dt: +res.dt, // 总时长
     url: res2.data[0].url //播放Url
   }
@@ -35,7 +37,10 @@ const songSlice = createSlice({
   name: 'login',
   initialState: {
     songInfo: {},
-    playlist: JSON.parse(localStorage.getItem('playlist')) || [], // 播放列表
+    playlist: JSON.parse(localStorage.getItem('playlist')) || [
+      { id: 30780536, name: '星屑の砂時計', artist: 'yu-yu', dt: 346733 },
+      { id: 610735, name: '深爱', artist: '水樹奈々', dt: 296440 }
+    ], // 播放列表
     currentIndex: -1, // 当前播放列表激活的歌曲索引
     lyricList: [], // 当前播放歌曲歌词数组
     currentLyric: 0 // 当前播放歌曲歌词索引
@@ -44,17 +49,26 @@ const songSlice = createSlice({
     setSongInfoAction(state, { payload }) {
       state.songInfo = payload
     },
-    // 1、给播放列表推入新的歌曲（id、名字、时长、作者）
+    // 1、给播放列表推入新的歌曲（id、name、dt、artist）
     pushPlaylistAction(state, { payload }) {
       const id = payload.id
+      let arr
 
-      // 不存在，就推入
-      if (state.playlist.findIndex(item => item.id === id) === -1) {
-        state.playlist = state.playlist.concat(payload)
+      // 如果传入的是一个数组，对每一项查重
+      if (Array.isArray(payload)) {
+        arr = payload.filter(_item => state.playlist.findIndex(item => item.id === _item.id) === -1)
+      }
+      // 一首歌也查重
+      else if (state.playlist.findIndex(item => item.id === id) === -1) {
+        // 不存在，就推入
+        arr = [payload]
       }
 
+      const arr2 = state.playlist.concat(arr)
+
+      state.playlist = arr2
       // 存储到本地
-      localStorage.setItem('playlist', JSON.stringify(state.playlist.concat(payload)))
+      localStorage.setItem('playlist', JSON.stringify(arr2))
     },
     // 2、设置当前播放歌曲的歌词
     setLyricListAction(state, { payload }) {
@@ -67,6 +81,21 @@ const songSlice = createSlice({
     // 4、设置播放列表当前播放的索引
     setCurrentIndexAction(state, { payload }) {
       state.currentIndex = payload
+    },
+    // 5、删除播放列表
+    setClearPlaylistAction(state, { payload }) {
+      let newPlayList
+      // 清空播放列表
+      if (typeof payload !== 'number') {
+        newPlayList = []
+      }
+      // 删除某一项
+      else {
+        newPlayList = state.playlist.filter((_, index) => payload !== index)
+      }
+
+      state.playlist = newPlayList
+      localStorage.setItem('playlist', JSON.stringify(newPlayList))
     }
   }
 })
@@ -76,7 +105,8 @@ export const {
   pushPlaylistAction,
   setLyricListAction,
   setCurrentLyricAction,
-  setCurrentIndexAction
+  setCurrentIndexAction,
+  setClearPlaylistAction
 } = songSlice.actions
 
 export default songSlice.reducer

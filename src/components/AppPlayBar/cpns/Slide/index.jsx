@@ -4,7 +4,7 @@ import { Slider } from 'antd'
 import { SlideWrapper } from './style'
 
 const Slide = memo(props => {
-  const { setCurrentTime, currentTime, dt, name, author, audioRef } = props
+  const { setCurrentTime, currentTime, dt, name, artist, audioRef } = props
 
   const handleChange = newValue => {
     audioRef.current.currentTime = (newValue / 1000).toFixed(0)
@@ -29,8 +29,8 @@ const Slide = memo(props => {
         <a className="link" href="#/" title={name}>
           {name}
         </a>
-        <a href="#/" className="author text-nowrap" title={author}>
-          {author}
+        <a href="#/" className="author text-nowrap" title={artist}>
+          {artist}
         </a>
       </div>
     </SlideWrapper>
